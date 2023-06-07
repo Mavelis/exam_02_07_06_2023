@@ -16,6 +16,7 @@ class MyTcpServer : public QObject
 public:
     explicit MyTcpServer(QObject *parent = nullptr);
     ~MyTcpServer();
+    QStringList performHeapSortStep(const QStringList &numbers, int step);
 
 public slots:
     void slotNewConnection();
@@ -24,16 +25,11 @@ public slots:
 
 private:
     QTcpServer *mTcpServer;
+    QTcpSocket * mTcpSocket;
+    int server_status;
     QList<QTcpSocket*> mTcpSockets;
 
     void sendStepResult(QTcpSocket *socket, int step, const QStringList &numbers);
-    QStringList performHeapSortStep(const QStringList &numbers, int step);
 };
 
 #endif // MYSERVER_H
-
-
-
-
-
-
