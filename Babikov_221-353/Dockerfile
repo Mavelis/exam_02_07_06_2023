@@ -1,20 +1,26 @@
+# Использование образа Ubuntu
 FROM ubuntu
 
+# Добавление информации об авторе в качестве метки
+LABEL author="Babikov Matvey"
+
+# Установка модулей для компиляции Qt
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
 RUN apt-get update
-RUN apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools -y
+RUN apt-get install qt5-default -y
+RUN apt-get install qtbase5-dev -y
+RUN apt-get install qt5-qmake
 RUN apt-get install build-essential -y
 
-WORKDIR /root/
-RUN mkdir server
-WORKDIR /root/server/
-COPY *.cpp /root/server/
-COPY *.h /root/server/
-COPY *.pro /root/server/
+# Копирование файлов проекта в контейнер
+COPY . /babikov_221-353
 
-RUN qmake echoServer.pro
+# Установка рабочей директории
+WORKDIR /babikov_221-353
+
+# Компиляция проекта
+RUN qmake
 RUN make
 
-ENTRYPOINT ["./echoServer"]
+CMD ["./hallServer"]
